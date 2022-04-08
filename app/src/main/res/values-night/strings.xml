@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_stefan">Hello Stefan!</string>
+    <string name="button">Button</string>
+    <string name="async_task_fetch_users">Async task fetch users</string>
+    <string name="perform_crud_operations_for_user">perform CRUD operations for user</string>
+</resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserPageActivity">
+
+    <TextView
+        android:id="@+id/txtUserPageUsername"
+        android:layout_width="380dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/lvUsersScores"
+        android:layout_width="405dp"
+        android:layout_height="166dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUserPageUsername"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <TextView
+        android:id="@+id/txtPreviousScores"
+        android:layout_width="250dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="217dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="217dp"
+        android:text="@string/previous_scores"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUserPageUsername" />
+
+    <TextView
+        android:id="@+id/txtGamesToJoin"
+        android:layout_width="223dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="265dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="265dp"
+        android:text="@string/games_to_join"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvUsersScores" />
+
+    <ListView
+        android:id="@+id/lvGamesToJoin"
+        android:layout_width="526dp"
+        android:layout_height="237dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtGamesToJoin"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <Button
+        android:id="@+id/btnCreateLobby"
+        android:layout_width="564dp"
+        android:layout_height="110dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="52dp"
+        android:onClick="createGameLobby"
+        android:text="@string/create_lobby"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lvGamesToJoin" />
+</androidx.constraintlayout.widget.ConstraintLayout>

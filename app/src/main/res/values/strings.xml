@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Bleicher Quiz</string>
+    <string name="button">Button</string>
+    <string name="async_task_fetch_users">Async task fetch users</string>
+    <string name="perform_crud_operations_for_user">perform CRUD operations for user</string>
+    <string name="hell_login">Hell login</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="previous_scores">Previous Scores</string>
+    <string name="games_to_join">Games to Join</string>
+    <string name="create_lobby">Create Lobby</string>
+</resources>
