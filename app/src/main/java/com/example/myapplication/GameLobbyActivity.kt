@@ -25,32 +25,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 
 class GameLobbyActivity: AppCompatActivity() {
     private lateinit var binding: GameLobbyBinding;
-
-    companion object {
-        const val host = "http://172.25.45.176.176:8080/api/v1/"
-    }
-
-    object API {
-        var BASE_URL = MainActivity.host
-
-        private val retrofit: Retrofit
-            get() {
-                val json = Gson();
-
-                return Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(json))
-                    .build()
-            }
-
-        val users get() = retrofit.create(UserService::class.java)
-        val scores get() = retrofit.create(ScoreService::class.java)
-        val games get() = retrofit.create(GameService::class.java)
-        val questions get() = retrofit.create(QuestionService::class.java)
-    }
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,9 +58,9 @@ class GameLobbyActivity: AppCompatActivity() {
                 /**
                  * Get all Questions
                  */
-                var questions = API.questions.listAll();
+                var questions = MainActivity.API.questions.listAll().toMutableList();
                 var questionsAsked: MutableList<Question> = mutableListOf();
-                questionsAsked.shuffle();
+                questions.shuffle();
                 /**
                  * Populate questionsAsked with random questions
                  */
@@ -220,7 +200,7 @@ class GameLobbyActivity: AppCompatActivity() {
                 /**
                  * Post score and end game
                  */
-                API.scores.create(ScoreToCreate(points, user));
+                MainActivity.API.scores.create(ScoreToCreate(points, LocalDate.now().toString(), LocalTime.now(ZoneId.of("Europe/Berlin")).toString(), user));
                 var x = 3;
                 for(i in 0..3) {
                     runOnUiThread {

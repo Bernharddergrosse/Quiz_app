@@ -25,28 +25,6 @@ import java.util.*
 class UserPageActivity: AppCompatActivity() {
     private lateinit var binding: UserPageBinding;
 
-    companion object {
-        const val host = "http://172.25.45.176:8080/api/v1/"
-    }
-
-    object API {
-        var BASE_URL = MainActivity.host
-
-        private val retrofit: Retrofit
-            get() {
-            val json = Gson();
-
-            return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(json))
-                .build()
-        }
-
-        val users get() = retrofit.create(UserService::class.java)
-        val scores get() = retrofit.create(ScoreService::class.java)
-        val games get() = retrofit.create(GameService::class.java)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState);
@@ -71,11 +49,11 @@ class UserPageActivity: AppCompatActivity() {
                  * Populate listView with Scores from the Previous games
                  * for the logged in user
                  */
-                var usersScores: List<Score> = UserPageActivity.API.scores.getForUser(user.id);
+                var usersScores: List<Score> = MainActivity.API.scores.getForUser(user.id);
                 val formattedScores: MutableList<String> = mutableListOf();
                 var cnt = 1;
                 for(userScore: Score in usersScores) {
-                    formattedScores.add("" + cnt + ": " + userScore.points);
+                    formattedScores.add("" + cnt + ": Game on the ${userScore.date} at ${userScore.time} result: " + userScore.points);
                     cnt++;
                 }
                 val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(this@UserPageActivity.baseContext, android.R.layout.simple_list_item_1, formattedScores);
@@ -86,9 +64,9 @@ class UserPageActivity: AppCompatActivity() {
                 /**
                  * Populate GamesToJoin list with games that only have 1 user
                  */
-                var allUsers: List<User> = API.users.listAll();
+                var allUsers: List<User> = MainActivity.API.users.listAll();
                 Log.i("All users", allUsers.toString());
-                var gamesToJoin: List<Game> = API.games.getGamesOneUser();
+                var gamesToJoin: List<Game> = MainActivity.API.games.getGamesOneUser();
                 Log.i("Games one user", gamesToJoin.toString());
                 val formattedGamesToJoin: MutableList<String> = mutableListOf();
                 var cntGamesToJoin = 1;
@@ -117,7 +95,7 @@ class UserPageActivity: AppCompatActivity() {
 
                 btnCreateGameLobby.setOnClickListener {
                     GlobalScope.launch {
-                        API.games.create(
+                        MainActivity.API.games.create(
                             GameToCreate(
                                 LocalDate.now().toString(),
                                 LocalTime.now().toString(),
