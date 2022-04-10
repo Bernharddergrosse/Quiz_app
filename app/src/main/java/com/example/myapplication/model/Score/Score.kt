@@ -2,7 +2,13 @@ package com.example.myapplication.model.Score
 
 import com.example.myapplication.model.User
 
-data class Score(var id: Long, var points: Int, var user: User?);
+data class Score(
+    var id: Long,
+    var date: String,
+    var time: String,
+    var points: Int,
+    var user: User?
+);
 
 /*
 class Score {

@@ -13,6 +13,9 @@ import androidx.lifecycle.ViewModel
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.model.User
 import com.example.myapplication.model.UserToLogin
+import com.example.myapplication.services.GameService
+import com.example.myapplication.services.QuestionService
+import com.example.myapplication.services.ScoreService
 import com.example.myapplication.services.UserService
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding;
     private lateinit var loggedInUser: User;
     companion object {
-        const val host = "http://172.25.45.176:8080/api/v1/"
+        const val host = "http://10.0.0.13:8080/api/v1/"
     }
 
     object API {
@@ -51,6 +54,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val users get() = retrofit.create(UserService::class.java)
+        val games get() = retrofit.create(GameService::class.java)
+        val scores get() = retrofit.create(ScoreService::class.java)
+        val questions get() = retrofit.create(QuestionService::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
