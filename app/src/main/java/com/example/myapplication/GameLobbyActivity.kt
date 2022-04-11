@@ -178,9 +178,9 @@ class GameLobbyActivity: AppCompatActivity() {
                     /**
                      * Update loading bar
                      */
-                    for (i in 0..99/2) {
+                    for (i in 0..99) {
                         runOnUiThread {
-                            timerBar.setProgress((i + 1) * 2, true);
+                            timerBar.setProgress(i + 1, true);
                         }
                         delay(100);
                     }

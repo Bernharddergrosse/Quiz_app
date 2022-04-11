@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.provider.FontsContractCompat
 import com.example.myapplication.databinding.UserPageBinding
 import com.example.myapplication.model.Game.Game
 import com.example.myapplication.model.Game.GameToCreate
@@ -80,10 +81,13 @@ class UserPageActivity : AppCompatActivity() {
                 val formattedGamesToJoin: MutableList<String> = mutableListOf();
                 var cntGamesToJoin = 1;
 
+                var gamesOneUser: MutableList<Game> = mutableListOf();
+
                 for (game: Game in gamesToJoin) {
                     Log.i("game", game.toString());
                     Log.i("user", user.toString());
                     if (game.user1.id != user.id) {
+                        gamesOneUser.add(game);
                         formattedGamesToJoin.add(
                             "" + cntGamesToJoin + ": Lobby von " + game.user1.username
                                     + " erstellt am " + game.date + " um " + game.time + ""
@@ -99,33 +103,39 @@ class UserPageActivity : AppCompatActivity() {
                         formattedGamesToJoin
                     );
                     gamesToJoinList.adapter = gamesToJoinAdapter;
+                    gamesToJoinList.setOnItemClickListener {
+                        parent, view, position, id ->
+
+                        var gson: Gson = Gson();
+                        var user = gson.toJson(loggedInUser);
+                        var game = gson.toJson(gamesOneUser.get(id.toInt()))
+                        val intent: Intent =
+                            Intent(this@UserPageActivity, GameLobbyActivity::class.java).apply {
+                                putExtra("user", user)
+                                putExtra("game", game)
+                            };
+
+                        startActivity(intent);
+                        GlobalScope.launch {
+                            MainActivity.API.games.delete(gamesOneUser.get(id.toInt()).id);
+                            var gamesAfterDeletion: List<Game> = MainActivity.API.games.getGamesOneUser();
+                            formattedGamesToJoin.removeAt(id.toInt())
+                            runOnUiThread {
+                                val gamesToJoinAdapter: ArrayAdapter<String> = ArrayAdapter(
+                                    this@UserPageActivity.baseContext,
+                                    android.R.layout.simple_list_item_1,
+                                    formattedGamesToJoin
+                                );
+                                gamesToJoinList.adapter = gamesToJoinAdapter;
+                            }
+                        }
+                    }
                 }
-
-                /*
-                binding.btnCreateLobby.setOnClickListener {
-
-                */
             } catch (ex: Throwable) {
                 Log.e("Error", ex.toString())
             }
         }
     }
-
-    /*
-    fun createGameLobby(view: View, user: User, game: Game) {
-        GlobalScope.launch {
-            var gson: Gson = Gson();
-            var user = gson.toJson(user);
-            var game = gson.toJson(game)
-
-            val intent: Intent = Intent(this@UserPageActivity, GameLobbyActivity::class.java).apply {
-                putExtra("user", user)
-                putExtra("game", game)
-            };
-
-            startActivity(intent);
-        }
-    }*/
 
     fun createGameLobby(view: View) {
         GlobalScope.launch {
