@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.databinding.GameLobbyBinding
+import com.example.myapplication.model.Game.Game
 import com.example.myapplication.model.Score.Score
 import com.example.myapplication.model.Score.ScoreToCreate
 import com.example.myapplication.model.User
@@ -40,7 +41,10 @@ class GameLobbyActivity: AppCompatActivity() {
 
         var gson: Gson = Gson();
         var strUserObj = intent.getStringExtra("user");
-        var user = gson.fromJson(strUserObj, User::class.java)
+        var strGameObj = intent.getStringExtra("game");
+
+        var user = gson.fromJson(strUserObj, User::class.java);
+        var game = gson.fromJson(strGameObj, Game::class.java);
 
         var timerBar: ProgressBar = findViewById(R.id.timerBar);
         timerBar.setProgress(0);
@@ -56,27 +60,14 @@ class GameLobbyActivity: AppCompatActivity() {
         GlobalScope.launch {
             try {
                 /**
-                 * Get all Questions
-                 */
-                var questions = MainActivity.API.questions.listAll().toMutableList();
-                var questionsAsked: MutableList<Question> = mutableListOf();
-                questions.shuffle();
-                /**
-                 * Populate questionsAsked with random questions
-                 */
-                for (i in 0..4) {
-                  //  val questionId: Int = (0..questions.size).random();
-                    questionsAsked.add(questions.get(i));
-                }
-
-                /**
                  * Main question loop, asks the number of questions in questionsAsked
                  * Change the question every 10 seconds
                  */
                 var questionNr = 1;
                 var points = 0;
-                for (question: Question in questionsAsked) {
-                    txtQuestionNr.text = "Question ${questionNr}/${questionsAsked.size}"
+
+                for (question: Question in game.questionsAsked) {
+                    txtQuestionNr.text = "Question ${questionNr}/${game.questionsAsked.size}"
                     Log.i("loop", "next question")
                     Log.i("question", question.toString())
                     txtQuestion.text = question.questionText;

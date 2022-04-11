@@ -8,7 +8,7 @@ interface GameService {
     @GET("games/")          suspend fun listAll(): List<Game>
     @GET("games/{id}")      suspend fun get(@Path("id") id: Long): Game
     @GET("games/oneUser")   suspend fun getGamesOneUser(): List<Game>
-    @POST("games")          suspend fun create(@Body s: GameToCreate): Game
+    @POST("games")          suspend fun create(@Body g: GameToCreate): Game
     @PUT("games/{id}")      suspend fun update(@Path("id") id: Long, @Body g: Game)
     @DELETE("games/{id}")   suspend fun delete(@Path("id") id: Long)
 }

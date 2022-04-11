@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.databinding.UserPageBinding
@@ -10,6 +11,7 @@ import com.example.myapplication.model.Game.Game
 import com.example.myapplication.model.Game.GameToCreate
 import com.example.myapplication.model.Score.Score
 import com.example.myapplication.model.User
+import com.example.myapplication.model.question.Question
 import com.example.myapplication.services.GameService
 import com.example.myapplication.services.ScoreService
 import com.example.myapplication.services.UserService
@@ -20,10 +22,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 import java.util.*
 
-class UserPageActivity: AppCompatActivity() {
+class UserPageActivity : AppCompatActivity() {
     private lateinit var binding: UserPageBinding;
+    private lateinit var loggedInUser: User;
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,6 +41,7 @@ class UserPageActivity: AppCompatActivity() {
         var gson: Gson = Gson();
         var strUserObj = intent.getStringExtra("user");
         var user: User = gson.fromJson(strUserObj, User::class.java);
+        loggedInUser = user;
 
         val txtBox = findViewById<TextView>(R.id.txtUserPageUsername).apply {
             text = user.username;
@@ -52,11 +57,15 @@ class UserPageActivity: AppCompatActivity() {
                 var usersScores: List<Score> = MainActivity.API.scores.getForUser(user.id);
                 val formattedScores: MutableList<String> = mutableListOf();
                 var cnt = 1;
-                for(userScore: Score in usersScores) {
+                for (userScore: Score in usersScores) {
                     formattedScores.add("" + cnt + ": Game on the ${userScore.date} at ${userScore.time} result: " + userScore.points);
                     cnt++;
                 }
-                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(this@UserPageActivity.baseContext, android.R.layout.simple_list_item_1, formattedScores);
+                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                    this@UserPageActivity.baseContext,
+                    android.R.layout.simple_list_item_1,
+                    formattedScores
+                );
                 scoreList.adapter = arrayAdapter;
                 Log.i("usersScores", usersScores.toString());
 
@@ -71,13 +80,13 @@ class UserPageActivity: AppCompatActivity() {
                 val formattedGamesToJoin: MutableList<String> = mutableListOf();
                 var cntGamesToJoin = 1;
 
-                for(game: Game in gamesToJoin) {
+                for (game: Game in gamesToJoin) {
                     Log.i("game", game.toString());
                     Log.i("user", user.toString());
-                    if(game.user1.id != user.id) {
+                    if (game.user1.id != user.id) {
                         formattedGamesToJoin.add(
                             "" + cntGamesToJoin + ": Lobby von " + game.user1.username
-                            + " erstellt am " + game.date + " um " + game.time + ""
+                                    + " erstellt am " + game.date + " um " + game.time + ""
                         );
                         cntGamesToJoin++;
                     }
@@ -92,35 +101,77 @@ class UserPageActivity: AppCompatActivity() {
                     gamesToJoinList.adapter = gamesToJoinAdapter;
                 }
 
+                /*
+                binding.btnCreateLobby.setOnClickListener {
 
-                btnCreateGameLobby.setOnClickListener {
-                    GlobalScope.launch {
-                        MainActivity.API.games.create(
-                            GameToCreate(
-                                LocalDate.now().toString(),
-                                LocalTime.now().toString(),
-                                user,
-                                null
-                            )
-                        )
-                    }
-                    createGameLobby(user);
-                }
+                */
             } catch (ex: Throwable) {
-                    Log.e("Error", ex.toString())
+                Log.e("Error", ex.toString())
             }
         }
     }
 
-    fun createGameLobby(user: User) {
+    /*
+    fun createGameLobby(view: View, user: User, game: Game) {
         GlobalScope.launch {
             var gson: Gson = Gson();
             var user = gson.toJson(user);
+            var game = gson.toJson(game)
 
             val intent: Intent = Intent(this@UserPageActivity, GameLobbyActivity::class.java).apply {
                 putExtra("user", user)
+                putExtra("game", game)
             };
+
             startActivity(intent);
+        }
+    }*/
+
+    fun createGameLobby(view: View) {
+        GlobalScope.launch {
+            try {
+                /**
+                 * Get all Questions
+                 */
+                var questions = MainActivity.API.questions.listAll().toMutableList();
+                var questionsAsked: MutableList<Question> = mutableListOf();
+                questions.shuffle();
+                Log.i("questions", questions.toString())
+                /**
+                 * Populate questionsAsked with random 5 questions
+                 */
+                for (i in 0..4) {
+                    questionsAsked.add(questions.get(i));
+                }
+                /**
+                 * Save questions asked as array to save it to the game object
+                 */
+                var questionsAskedArray: Array<Question> = questionsAsked.toTypedArray();
+                var gameToPlay: GameToCreate = GameToCreate(
+                    LocalDate.now().toString(),
+                    LocalTime.now(ZoneId.of("Europe/Berlin")).toString(),
+                    loggedInUser,
+                    null,
+                    questionsAskedArray
+                )
+                var game = MainActivity.API.games.create(gameToPlay)
+
+                GlobalScope.launch {
+                    var gson: Gson = Gson();
+                    var user = gson.toJson(loggedInUser);
+                    var game = gson.toJson(game)
+
+                    val intent: Intent =
+                        Intent(this@UserPageActivity, GameLobbyActivity::class.java).apply {
+                            putExtra("user", user)
+                            putExtra("game", game)
+                        };
+
+                    startActivity(intent);
+                }
+            } catch (ex: Throwable) {
+                Log.e("Error", ex.toString())
+            }
         }
     }
 }
