@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding;
     private lateinit var loggedInUser: User;
     companion object {
-        const val host = "http://10.0.0.13:8080/api/v1/"
+        const val host = "http://10.0.0.57:8080/api/v1/"
     }
 
     object API {
