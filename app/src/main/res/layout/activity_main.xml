@@ -11,7 +11,7 @@
         android:layout_width="251dp"
         android:layout_height="48dp"
         android:layout_marginStart="264dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="172dp"
         android:layout_marginEnd="264dp"
         android:autofillHints=""
         android:ems="10"
@@ -21,16 +21,32 @@
         android:text="tester"
         android:textColorHint="#757575"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="356dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="356dp"
+        android:enabled="false"
+        android:onClick="logIn"
+        android:text="@string/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <EditText
         android:id="@+id/txtPassword"
         android:layout_width="255dp"
         android:layout_height="51dp"
         android:layout_marginStart="264dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="264dp"
         android:autofillHints=""
         android:ems="10"
@@ -40,19 +56,36 @@
         android:text="tester"
         android:textColorHint="#757575"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.647"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
 
-    <Button
-        android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="356dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="356dp"
-        android:onClick="logIn"
-        android:text="@string/login"
+    <EditText
+        android:id="@+id/txtHost"
+        android:layout_width="294dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="253dp"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="253dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="http://10.0.0.57:8080/api/v1/"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="353dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="353dp"
+        android:onClick="connectToBackend"
+        android:text="Connect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHost" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

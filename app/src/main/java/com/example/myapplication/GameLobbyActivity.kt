@@ -30,7 +30,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-class GameLobbyActivity: AppCompatActivity() {
+class GameLobbyActivity : AppCompatActivity() {
     private lateinit var binding: GameLobbyBinding;
 
     @SuppressLint("ResourceAsColor")
@@ -57,6 +57,7 @@ class GameLobbyActivity: AppCompatActivity() {
 
         var txtQuestionNr = findViewById<TextView>(R.id.txtViewNrOfQuestion)
 
+        var points = 0;
         GlobalScope.launch {
             try {
                 /**
@@ -64,14 +65,18 @@ class GameLobbyActivity: AppCompatActivity() {
                  * Change the question every 10 seconds
                  */
                 var questionNr = 1;
-                var points = 0;
 
                 for (question: Question in game.questionsAsked) {
                     txtQuestionNr.text = "Question ${questionNr}/${game.questionsAsked.size}"
                     Log.i("loop", "next question")
                     Log.i("question", question.toString())
                     txtQuestion.text = question.questionText;
-                    var answers: MutableList<String> = mutableListOf(question.answer1, question.answer2, question.answer3, question.answer4)
+                    var answers: MutableList<String> = mutableListOf(
+                        question.answer1,
+                        question.answer2,
+                        question.answer3,
+                        question.answer4
+                    )
                     answers.shuffle()
 
                     btnAnswer1.text = answers.get(0)
@@ -134,7 +139,6 @@ class GameLobbyActivity: AppCompatActivity() {
                         btnAnswer3.isEnabled = false;
                         btnAnswer4.isEnabled = false;
 
-
                         Log.i("a2", btnAnswer2.text.toString())
                     }
 
@@ -178,12 +182,13 @@ class GameLobbyActivity: AppCompatActivity() {
                     /**
                      * Update loading bar
                      */
-                    for (i in 0..99/2) {
+                    for (i in 0..99) {
                         runOnUiThread {
-                            timerBar.setProgress((i + 1) * 2, true);
+                            timerBar.setProgress(i + 1, true);
                         }
                         delay(100);
                     }
+
                     questionNr++;
                 }
 
@@ -191,11 +196,22 @@ class GameLobbyActivity: AppCompatActivity() {
                 /**
                  * Post score and end game
                  */
-                MainActivity.API.scores.create(ScoreToCreate(points, LocalDate.now().toString(), LocalTime.now(ZoneId.of("Europe/Berlin")).toString(), user));
+                MainActivity.API.scores.create(
+                    ScoreToCreate(
+                        points,
+                        LocalDate.now().toString(),
+                        LocalTime.now(ZoneId.of("Europe/Berlin")).toString(),
+                        user
+                    )
+                );
                 var x = 3;
-                for(i in 0..3) {
+                for (i in 0..3) {
                     runOnUiThread {
-                        Toast.makeText(applicationContext, "Your final score was ${points}, going home in ${x}", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                            applicationContext,
+                            "Your final score was ${points}, going home in ${x}",
+                            Toast.LENGTH_SHORT
+                        ).show();
                         x--;
                     }
                     delay(1000);
