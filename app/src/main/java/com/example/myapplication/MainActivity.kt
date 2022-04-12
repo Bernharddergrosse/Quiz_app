@@ -87,6 +87,11 @@ class MainActivity : AppCompatActivity() {
                 runOnUiThread {
                     binding.loginButton.isEnabled = false;
                     binding.btnRegisterNewUser.isEnabled = false;
+                    Toast.makeText(
+                        applicationContext,
+                        "Connection Error",
+                        Toast.LENGTH_LONG
+                    ).show();
                 }
                 Log.e("Connection Error", ex.toString());
             }

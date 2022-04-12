@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -10,6 +11,7 @@ import com.example.myapplication.databinding.RegisterUserBinding
 import com.example.myapplication.model.User
 import com.example.myapplication.model.UserToLogin
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
@@ -45,6 +47,12 @@ class RegisterActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show();
                     }
+                    delay(1000);
+                    val intent: Intent = Intent(
+                        this@RegisterActivity,
+                        MainActivity::class.java
+                    )
+                    startActivity(intent);
                 } else {
                     runOnUiThread {
                         Toast.makeText(
@@ -55,7 +63,6 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             } catch (ex: Throwable) {
-
                 Log.e("Register Error", ex.toString())
             }
         }
