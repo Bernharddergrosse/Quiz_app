@@ -76,12 +76,21 @@ class MainActivity : AppCompatActivity() {
             try {
                 var connectionTest = API.users.listAll();
                 Log.i("connection", connectionTest.toString())
-                binding.loginButton.isEnabled = true;
             } catch (ex: Throwable) {
                 Log.e("Connection Error", ex.toString());
             }
         }
+        binding.btnRegisterNewUser.isEnabled = true;
+        binding.loginButton.isEnabled = true;
         Log.i("API host", API.BASE_URL);
+    }
+
+    fun openRegisterUser(view: View) {
+        val intent: Intent = Intent(
+            this@MainActivity,
+            RegisterActivity::class.java
+        )
+        startActivity(intent);
     }
 
     fun logIn(view: View) {
