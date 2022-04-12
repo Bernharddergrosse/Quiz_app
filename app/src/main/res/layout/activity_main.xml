@@ -82,9 +82,10 @@
         android:layout_marginTop="33dp"
         android:layout_marginEnd="253dp"
         android:ems="10"
+        android:hint="Server IP"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="http://10.0.0.57:8080/api/v1/"
+        android:text="10.0.0.57"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

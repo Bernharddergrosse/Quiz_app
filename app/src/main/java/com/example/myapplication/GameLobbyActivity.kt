@@ -46,6 +46,7 @@ class GameLobbyActivity : AppCompatActivity() {
         var user = gson.fromJson(strUserObj, User::class.java);
         var game = gson.fromJson(strGameObj, Game::class.java);
 
+        binding.txtUserPlaying.text = user.username
         var timerBar: ProgressBar = findViewById(R.id.timerBar);
         timerBar.setProgress(0);
 

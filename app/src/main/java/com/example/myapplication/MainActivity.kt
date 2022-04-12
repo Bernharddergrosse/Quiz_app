@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Base64InputStream
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -67,22 +68,29 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
     }
 
     fun connectToBackend(view: View) {
         Log.i("connect", "connect")
-        API.setHost(binding.txtHost.text.toString());
+
+        API.setHost("http://${binding.txtHost.text}:8080/api/v1/");
         GlobalScope.launch {
             try {
                 var connectionTest = API.users.listAll();
                 Log.i("connection", connectionTest.toString())
+                runOnUiThread {
+                    binding.loginButton.isEnabled = true;
+                    binding.btnRegisterNewUser.isEnabled = true;
+                }
             } catch (ex: Throwable) {
+                runOnUiThread {
+                    binding.loginButton.isEnabled = false;
+                    binding.btnRegisterNewUser.isEnabled = false;
+                }
                 Log.e("Connection Error", ex.toString());
             }
         }
-        binding.btnRegisterNewUser.isEnabled = true;
-        binding.loginButton.isEnabled = true;
-        Log.i("API host", API.BASE_URL);
     }
 
     fun openRegisterUser(view: View) {
@@ -126,7 +134,11 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(applicationContext, "User not found", Toast.LENGTH_LONG)
                             .show();
                     } else if (ex.code().equals(400)) {
-                        Toast.makeText(applicationContext, "Password Incorrect", Toast.LENGTH_LONG)
+                        Toast.makeText(
+                            applicationContext,
+                            "Password Incorrect",
+                            Toast.LENGTH_LONG
+                        )
                             .show();
                     }
                 }
