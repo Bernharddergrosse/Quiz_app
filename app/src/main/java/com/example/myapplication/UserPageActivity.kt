@@ -62,12 +62,16 @@ class UserPageActivity : AppCompatActivity() {
                     formattedScores.add("" + cnt + ": Game on the ${userScore.date} at ${userScore.time} result: " + userScore.points);
                     cnt++;
                 }
-                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                    this@UserPageActivity.baseContext,
-                    android.R.layout.simple_list_item_1,
-                    formattedScores
-                );
-                scoreList.adapter = arrayAdapter;
+                if(formattedScores != null) {
+                    runOnUiThread {
+                        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                            this@UserPageActivity.baseContext,
+                            android.R.layout.simple_list_item_1,
+                            formattedScores
+                        );
+                        scoreList.adapter = arrayAdapter;
+                    }
+                }
                 Log.i("usersScores", usersScores.toString());
 
 
