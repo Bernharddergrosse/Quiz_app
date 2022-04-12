@@ -13,10 +13,7 @@ import androidx.lifecycle.ViewModel
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.model.User
 import com.example.myapplication.model.UserToLogin
-import com.example.myapplication.services.GameService
-import com.example.myapplication.services.QuestionService
-import com.example.myapplication.services.ScoreService
-import com.example.myapplication.services.UserService
+import com.example.myapplication.services.*
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,6 +21,7 @@ import kotlinx.coroutines.newFixedThreadPoolContext
 import org.json.JSONArray
 import org.json.JSONObject
 import org.w3c.dom.Text
+import retrofit2.Converter
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -45,6 +43,10 @@ class MainActivity : AppCompatActivity() {
     object API {
         var BASE_URL = MainActivity.host
 
+        fun setHost(host: String) {
+            BASE_URL = host;
+        }
+
         private val retrofit: Retrofit
             get() {
                 val json = Gson();
@@ -65,6 +67,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    fun connectToBackend(view: View) {
+        Log.i("connect", "connect")
+        API.setHost(binding.txtHost.text.toString());
+        GlobalScope.launch {
+            try {
+                var connectionTest = API.users.listAll();
+                Log.i("connection", connectionTest.toString())
+                binding.loginButton.isEnabled = true;
+            } catch (ex: Throwable) {
+                Log.e("Connection Error", ex.toString());
+            }
+        }
+        Log.i("API host", API.BASE_URL);
     }
 
     fun logIn(view: View) {
